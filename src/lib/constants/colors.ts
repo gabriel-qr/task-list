@@ -29,6 +29,8 @@ export const Colors = {
     statusIncomplete: 'rgb(156, 163, 175)',
     destructive: 'rgb(239, 68, 68)',
     destructiveForeground: 'rgb(255, 255, 255)',
+
+    white: 'rgba(255, 255, 255, 1)',
   },
 
   dark: {
@@ -61,6 +63,8 @@ export const Colors = {
     statusIncomplete: 'rgb(107, 114, 128)',
     destructive: 'rgb(248, 113, 113)',
     destructiveForeground: 'rgb(17, 24, 39)',
+
+    white: 'rgba(255, 255, 255, 1)',
   },
 };
 

@@ -1,26 +1,33 @@
-import { getFormattedDate } from '@/lib/functions/timeFuntions';
+import { useTaskContext } from '@/contexts/TaskContext';
 import { useThemeColors } from '@/lib/hooks/useThemeColors';
 import Feather from '@expo/vector-icons/Feather';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import CircleCheck from './CircleCheck';
-import StatusTag from './statusTag';
+import StatusTag from './StatusTag';
 
 interface TaskCardProps {
-  label?: string;
-  priority?: string;
-  status: 'complete' | 'incomplete';
+  id: number;
+  title: string;
+  createdAt: string;
+  status: string;
+  priority: 'high' | 'medium' | 'low' | null;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({
-  label = 'Design new landing page',
-  priority = 'Medio',
-  status,
-}) => {
+const TaskCard: React.FC<TaskCardProps> = ({ id, title, createdAt, status, priority }) => {
   const [isComplete, setIsComplete] = useState(status === 'complete');
   const { colors } = useThemeColors();
+  const { deleteTask } = useTaskContext();
 
-  const formattedDate = getFormattedDate();
+  const getBorderColor = () => {
+    const priorityColors = {
+      high: colors.priorityHigh,
+      medium: colors.priorityMedium,
+      low: colors.priorityLow,
+    };
+
+    return priorityColors[priority!];
+  };
 
   const handlePressCheckCircle = () => {
     setIsComplete((previousState) => !previousState);
@@ -30,7 +37,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
     <View
       style={[
         styles.container,
-        { backgroundColor: colors.card, borderLeftColor: colors.priorityHigh },
+        { backgroundColor: colors.card, borderLeftColor: getBorderColor() },
       ]}
     >
       <View style={{ flexDirection: 'row', gap: 16 }}>
@@ -41,7 +48,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
           <View style={styles.taskInfoContainer}>
             <Text
               style={[
-                styles.label,
+                styles.title,
                 {
                   color: colors.cardForeground,
                   textDecorationLine: isComplete ? 'line-through' : 'none',
@@ -49,10 +56,10 @@ const TaskCard: React.FC<TaskCardProps> = ({
                 },
               ]}
             >
-              {label}
+              {title}
             </Text>
             <Text style={[styles.dateText, { color: colors.mutedForeground }]}>
-              Created at {formattedDate}
+              Created at {createdAt}
             </Text>
           </View>
           <StatusTag isComplete={isComplete} />
@@ -63,7 +70,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
           name='trash-2'
           size={25}
           color={colors.priorityHigh}
-          onPress={() => console.log('teste')}
+          onPress={() => deleteTask(id)}
         />
       </View>
     </View>
@@ -90,7 +97,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
 
-  label: {
+  title: {
     fontSize: 18,
   },
 
