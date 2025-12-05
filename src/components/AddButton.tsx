@@ -1,4 +1,4 @@
-import { useThemeColors } from '@/lib/hooks/useThemeColors';
+import { useThemeColors } from '@/contexts/ThemeContext';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 

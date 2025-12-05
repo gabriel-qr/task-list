@@ -1,25 +1,26 @@
 import AddTask from '@/components/AddTask';
 import TaskCard from '@/components/TaskCard';
+import ThemeButton from '@/components/ThemeButton';
 import { toastConfig } from '@/components/ToastConfig';
 import { useTaskContext } from '@/contexts/TaskContext';
-import { useThemeColors } from '@/lib/hooks/useThemeColors';
-import { useEffect } from 'react';
+import { useThemeColors } from '@/contexts/ThemeContext';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 
 export default function Index() {
-  const { colors } = useThemeColors();
   const { taskList } = useTaskContext();
 
-  useEffect(() => {
-    console.log(taskList.length);
-  }, [taskList]);
+  const { colors } = useThemeColors();
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
       <View style={styles.container}>
-        <Text style={{ color: colors.foreground }}>WELCOME</Text>
+        <View style={styles.header}>
+          <Text style={[styles.textHeader, { color: colors.foreground }]}>Task Manager</Text>
+
+          <ThemeButton />
+        </View>
         <AddTask />
         <FlatList
           contentContainerStyle={styles.tasksContainer}
@@ -47,10 +48,21 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    // flex: 1,
     gap: 25,
     alignItems: 'center',
     padding: '5%',
+  },
+
+  header: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  textHeader: {
+    fontSize: 24,
+    fontWeight: '900',
   },
 
   tasksContainer: {

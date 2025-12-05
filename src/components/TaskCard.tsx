@@ -1,5 +1,5 @@
 import { useTaskContext } from '@/contexts/TaskContext';
-import { useThemeColors } from '@/lib/hooks/useThemeColors';
+import { useThemeColors } from '@/contexts/ThemeContext';
 import Feather from '@expo/vector-icons/Feather';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -37,7 +37,11 @@ const TaskCard: React.FC<TaskCardProps> = ({ id, title, createdAt, status, prior
     <View
       style={[
         styles.container,
-        { backgroundColor: colors.card, borderLeftColor: getBorderColor() },
+        {
+          backgroundColor: colors.card,
+          borderLeftColor: getBorderColor(),
+          borderColor: colors.mutedForeground,
+        },
       ]}
     >
       <View style={{ flexDirection: 'row', gap: 16 }}>
@@ -85,7 +89,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     padding: 20,
-    borderLeftWidth: 5,
+    borderLeftWidth: 8,
+    borderWidth: 1.5,
     borderRadius: 16,
   },
 

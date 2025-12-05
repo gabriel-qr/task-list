@@ -1,6 +1,6 @@
 import { useTaskContext } from '@/contexts/TaskContext';
+import { useThemeColors } from '@/contexts/ThemeContext';
 import { getFormattedDate } from '@/lib/functions/timeFuntions';
-import { useThemeColors } from '@/lib/hooks/useThemeColors';
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import Toast from 'react-native-toast-message';
