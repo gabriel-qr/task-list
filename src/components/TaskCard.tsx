@@ -65,6 +65,9 @@ const TaskCard: React.FC<TaskCardProps> = ({ id, title, createdAt, status, prior
             <Text style={[styles.dateText, { color: colors.mutedForeground }]}>
               Created at {createdAt}
             </Text>
+            <Text style={[styles.priorityText, { color: getBorderColor() }]}>
+              Priority: {priority}
+            </Text>
           </View>
           <StatusTag isComplete={isComplete} />
         </View>
@@ -107,9 +110,13 @@ const styles = StyleSheet.create({
   },
 
   dateText: {
-    justifyContent: 'center',
-    alignItems: 'center',
     fontSize: 14,
+  },
+
+  priorityText: {
+    fontWeight: '600',
+    fontSize: 14,
+    textTransform: 'capitalize',
   },
 });
 

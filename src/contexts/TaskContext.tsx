@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from 'react';
+import useStorage from '@/lib/hooks/useStorage';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface TaskInfoType {
   id: number;
@@ -12,22 +13,41 @@ interface TaskContextType {
   taskList: TaskInfoType[];
   addTask: (task: TaskInfoType) => void;
   deleteTask: (id: number) => void;
+  loading: boolean;
 }
 
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
 
 export const TaskInfoProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { getItem, saveItem } = useStorage();
+
   const [taskList, setTaskList] = useState<TaskInfoType[]>([]);
-  const addTask = (task: TaskInfoType) => {
-    setTaskList((prev) => [task, ...prev]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const loadTasks = async () => {
+      setLoading(true);
+      const tasks = await getItem('@taskList');
+      setTaskList(tasks);
+      setLoading(false);
+    };
+    loadTasks();
+  }, []);
+
+  const addTask = async (task: TaskInfoType) => {
+    const newList = [task, ...taskList];
+    setTaskList(newList);
+    await saveItem('@taskList', newList);
   };
 
-  const deleteTask = (taskId: number) => {
-    setTaskList((prev) => prev.filter((task) => task.id !== taskId));
+  const deleteTask = async (taskId: number) => {
+    const newList = taskList.filter((task) => task.id !== taskId);
+    setTaskList(newList);
+    await saveItem('@taskList', newList);
   };
 
   return (
-    <TaskContext.Provider value={{ taskList, addTask, deleteTask }}>
+    <TaskContext.Provider value={{ taskList, addTask, deleteTask, loading }}>
       {children}
     </TaskContext.Provider>
   );

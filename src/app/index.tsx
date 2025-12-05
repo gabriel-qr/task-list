@@ -4,14 +4,21 @@ import ThemeButton from '@/components/ThemeButton';
 import { toastConfig } from '@/components/ToastConfig';
 import { useTaskContext } from '@/contexts/TaskContext';
 import { useThemeColors } from '@/contexts/ThemeContext';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 
 export default function Index() {
-  const { taskList } = useTaskContext();
-
+  const { taskList, loading } = useTaskContext();
   const { colors } = useThemeColors();
+
+  if (loading) {
+    return (
+      <View style={[styles.loadingState, { backgroundColor: colors.background }]}>
+        <ActivityIndicator size={'large'} color={colors.foreground} />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
@@ -23,6 +30,7 @@ export default function Index() {
         </View>
         <AddTask />
         <FlatList
+          style={{ flex: 1 }}
           contentContainerStyle={styles.tasksContainer}
           data={taskList}
           showsVerticalScrollIndicator={false}
@@ -43,13 +51,19 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
+  loadingState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   safeArea: {
     flex: 1,
   },
 
   container: {
+    flex: 1,
     gap: 25,
-    alignItems: 'center',
     padding: '5%',
   },
 
@@ -67,5 +81,6 @@ const styles = StyleSheet.create({
 
   tasksContainer: {
     gap: 12,
+    paddingBottom: 200,
   },
 });
