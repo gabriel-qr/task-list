@@ -11,7 +11,12 @@ const Counter: React.FC<CounterProps> = ({ value, label }) => {
   const { colors } = useThemeColors();
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.card }]}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: colors.card, borderColor: colors.mutedForeground },
+      ]}
+    >
       <Text style={[styles.counterText, { color: colors.ring }]}>{value}</Text>
       <Text style={[styles.labelText, { color: colors.cardForeground }]}>{label}</Text>
     </View>
@@ -21,8 +26,9 @@ const Counter: React.FC<CounterProps> = ({ value, label }) => {
 const styles = StyleSheet.create({
   container: {
     width: '30%',
-    paddingVertical: 20,
+    paddingVertical: 10,
     borderRadius: 16,
+    borderWidth: 1,
     gap: 8,
     alignItems: 'center',
     justifyContent: 'center',

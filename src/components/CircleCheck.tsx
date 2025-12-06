@@ -20,7 +20,7 @@ const CircleCheck: React.FC<CircleCheckProps> = ({ isComplete }) => {
         { borderWidth: bdwidth, backgroundColor: bgcolor, borderColor: bdcolor },
       ]}
     >
-      {isComplete && <AntDesign name='check' size={14} color={'#f8f8f8'} />}
+      {isComplete && <AntDesign name='check' size={14} color={colors.white} />}
     </View>
   );
 };
