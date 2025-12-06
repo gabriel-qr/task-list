@@ -1,4 +1,5 @@
 import AddTask from '@/components/AddTask';
+import Counter from '@/components/Counter';
 import TaskCard from '@/components/TaskCard';
 import ThemeButton from '@/components/ThemeButton';
 import { toastConfig } from '@/components/ToastConfig';
@@ -9,7 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 
 export default function Index() {
-  const { taskList, loading } = useTaskContext();
+  const { taskList, loading, completedTasks, incompleteTasks, totalTasks } = useTaskContext();
   const { colors } = useThemeColors();
 
   if (loading) {
@@ -25,8 +26,12 @@ export default function Index() {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={[styles.textHeader, { color: colors.foreground }]}>Task Manager</Text>
-
           <ThemeButton />
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+          <Counter value={totalTasks} label='Total' />
+          <Counter value={completedTasks} label='Completed' />
+          <Counter value={incompleteTasks} label='Incomplete' />
         </View>
         <AddTask />
         <FlatList
@@ -81,6 +86,7 @@ const styles = StyleSheet.create({
 
   tasksContainer: {
     gap: 12,
-    paddingBottom: 200,
+    paddingBottom: 20,
+    paddingTop: 20,
   },
 });

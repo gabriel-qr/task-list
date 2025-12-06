@@ -14,6 +14,10 @@ interface TaskContextType {
   addTask: (task: TaskInfoType) => void;
   deleteTask: (id: number) => void;
   loading: boolean;
+  totalTasks: number;
+  completedTasks: number;
+  incompleteTasks: number;
+  toggleTaskStatus: (id: number) => void;
 }
 
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
@@ -24,13 +28,21 @@ export const TaskInfoProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [taskList, setTaskList] = useState<TaskInfoType[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const totalTasks = taskList.length;
+  const completedTasks = taskList.filter((task) => task.status === 'complete').length;
+  const incompleteTasks = totalTasks - completedTasks;
+  console.log(
+    `Total: ${totalTasks}, Completas: ${completedTasks}, Incompletas: ${incompleteTasks}`
+  );
+
+  const loadTasks = async () => {
+    setLoading(true);
+    const tasks = await getItem('@taskList');
+    setTaskList(tasks);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const loadTasks = async () => {
-      setLoading(true);
-      const tasks = await getItem('@taskList');
-      setTaskList(tasks);
-      setLoading(false);
-    };
     loadTasks();
   }, []);
 
@@ -46,8 +58,29 @@ export const TaskInfoProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     await saveItem('@taskList', newList);
   };
 
+  const toggleTaskStatus = async (taskId: number) => {
+    const newList = taskList.map((task) =>
+      task.id === taskId
+        ? { ...task, status: task.status === 'complete' ? 'incomplete' : 'complete' }
+        : task
+    );
+    setTaskList(newList);
+    await saveItem('@taskList', newList);
+  };
+
   return (
-    <TaskContext.Provider value={{ taskList, addTask, deleteTask, loading }}>
+    <TaskContext.Provider
+      value={{
+        taskList,
+        addTask,
+        deleteTask,
+        loading,
+        totalTasks,
+        completedTasks,
+        incompleteTasks,
+        toggleTaskStatus,
+      }}
+    >
       {children}
     </TaskContext.Provider>
   );

@@ -9,7 +9,7 @@ interface CircleCheckProps {
 
 const CircleCheck: React.FC<CircleCheckProps> = ({ isComplete }) => {
   const { colors } = useThemeColors();
-  const bgcolor = !isComplete ? colors.statusIncomplete : colors.statusComplete;
+  const bgcolor = !isComplete ? colors.secondary : colors.statusComplete;
   const bdcolor = !isComplete ? colors.mutedForeground : colors.statusComplete;
   const bdwidth = !isComplete ? 2 : 0;
 

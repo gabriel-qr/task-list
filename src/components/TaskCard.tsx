@@ -2,7 +2,7 @@ import { useTaskContext } from '@/contexts/TaskContext';
 import { useThemeColors } from '@/contexts/ThemeContext';
 import Feather from '@expo/vector-icons/Feather';
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import CircleCheck from './CircleCheck';
 import StatusTag from './StatusTag';
 
@@ -17,7 +17,7 @@ interface TaskCardProps {
 const TaskCard: React.FC<TaskCardProps> = ({ id, title, createdAt, status, priority }) => {
   const [isComplete, setIsComplete] = useState(status === 'complete');
   const { colors } = useThemeColors();
-  const { deleteTask } = useTaskContext();
+  const { deleteTask, toggleTaskStatus } = useTaskContext();
 
   const getBorderColor = () => {
     const priorityColors = {
@@ -31,6 +31,25 @@ const TaskCard: React.FC<TaskCardProps> = ({ id, title, createdAt, status, prior
 
   const handlePressCheckCircle = () => {
     setIsComplete((previousState) => !previousState);
+    toggleTaskStatus(id);
+  };
+
+  const handleDelete = () => {
+    Alert.alert(
+      'Delete Task',
+      'Are you sure you want to delete this task?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: () => deleteTask(id),
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   return (
@@ -73,12 +92,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ id, title, createdAt, status, prior
         </View>
       </View>
       <View style={{ alignSelf: 'center' }}>
-        <Feather
-          name='trash-2'
-          size={25}
-          color={colors.priorityHigh}
-          onPress={() => deleteTask(id)}
-        />
+        <Feather name='trash-2' size={25} color={colors.priorityHigh} onPress={handleDelete} />
       </View>
     </View>
   );
