@@ -24,7 +24,7 @@ This application demonstrates a complete implementation of a task list with pers
 ### User Interface
 
 - **Light and Dark Themes:** Switch between color schemes for optimal viewing comfort
-- **Responsive Design:** Adapts to different screen sizes and orientations
+- **Responsive Design:** Adapts to different screen sizes
 - **Toast Notifications:** Visual feedback for user actions
 
 ### Architecture
